@@ -12,6 +12,7 @@ from reviewer_app.serializer import MovieSerializer, ReviewerSerializer, ReviewS
 def welcome(request):
     return HttpResponse("Welcome to the Movie Review App")
 
+#Views for the Movie Model =================================================
 class MovieListCreateAPIView(APIView):
     def get(self, request):
         all_movies = Movie.objects.all()
@@ -21,7 +22,10 @@ class MovieListCreateAPIView(APIView):
     def post(self, request):
         title = request.POST["title"]
         imdb_link = request.POST["imdb_link"]
-        new_movie = Movie.objects.create(title=title)
+        director = request.POST["director"]
+        release_year = request.POST["release_year"]
+        genre = request.POST["genre"]
+        new_movie = Movie.objects.create(title=title, imdb_link=imdb_link, director=director, release_year=release_year, genre=genre)
         serialized_movie = MovieSerializer(new_movie)
         return Response(serialized_movie.data, 201)
 
@@ -35,6 +39,9 @@ class MovieDetailAPIView(APIView):
         movie = Movie.objects.get(id=pk)
         movie.title = request.POST["title"]
         movie.imdb_link = request.POST["imdb_link"]
+        movie.director = request.POST["director"]
+        movie.release_year = request.POST["release_year"]
+        movie.genre = request.POST["genre"]
         movie.save()
         serialized_movie = MovieSerializer(movie)
         return Response(serialized_movie.data, 200)
@@ -43,3 +50,5 @@ class MovieDetailAPIView(APIView):
         movie = Movie.objects.get(id=pk)
         movie.delete()
         return Response("", 204)
+
+#Views for the Reviewer Model ==================================================
