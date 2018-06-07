@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 
 from reviewer_app.views import welcome, MovieListCreateAPIView, MovieDetailAPIView, \
-                            ReviewerListCreateAPIView, ReviewerDetailAPIView
+                            ReviewerListCreateAPIView, ReviewerDetailAPIView, ReviewListCreateAPIView, \
+                            ReviewRetrieveUpdateDestroyAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +27,7 @@ urlpatterns = [
     path('movies/<int:pk>', MovieDetailAPIView.as_view()),
     path('reviewers/', ReviewerListCreateAPIView.as_view()),
     path('reviewers/<int:pk>', ReviewerDetailAPIView.as_view()),
+    path('reviews/', ReviewListCreateAPIView.as_view()),
+    path('reviews/<int:pk>', ReviewRetrieveUpdateDestroyAPIView.as_view()),
 
 ]

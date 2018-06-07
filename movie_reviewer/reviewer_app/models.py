@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+
+#Movie Model ===============================================
 class Movie(models.Model):
     title = models.CharField(max_length=255, unique=True)
     imdb_link = models.CharField(max_length=255, null=True)
@@ -11,6 +13,7 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+#Reviewer Model ============================================
 class Reviewer(models.Model):
     age = models.IntegerField(null=True)
     occupation = models.CharField(max_length=255, null=True)
@@ -24,7 +27,7 @@ occupation {self.occupation}
 in {self.postal_code}
 """
 
-
+#Review Model ===============================================
 class Review(models.Model):
     stars = models.IntegerField(null=True)
     review_text = models.TextField(null=True)
