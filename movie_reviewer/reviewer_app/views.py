@@ -52,3 +52,36 @@ class MovieDetailAPIView(APIView):
         return Response("", 204)
 
 #Views for the Reviewer Model ==================================================
+class ReviewerListCreateAPIView(APIView):
+    def get(self, request):
+        all_reviewers = Reviewer.objects.all()
+        serialized_reviewers = ReviewerSerializer(all_reviewers, many=True)
+        return Response(serialized_reviewers.data, 200)
+
+    def post(self, request):
+        age = request.POST["age"]
+        occupation = request.POST["occupation"]
+        postal_code = request.POST["postal_code"]
+        new_reviewer = Reviewer.objects.create(age=age, occupation=occupation, postal_code=postal_code)
+        serialized_reviewer = ReviewerSerializer(new_reviewer)
+        return Response(serialized_reviewer.data, 201)
+
+class ReviewerDetailAPIView(APIView):
+    def get(self, request, pk):
+        reviewer = Reviewer.objects.get(id=pk)
+        serialized_reviewer = ReviewerSerializer(reviewer)
+        return Response(serialized_reviewer.data, 200)
+
+    def put(self, request, pk):
+        reviewer = Reviewer.objects.get(id=pk)
+        reviewer.age = request.POST["age"]
+        reviewer.occupation = request.POST["occupation"]
+        reviewer.postal_code = request.POST["postal_code"]
+        reviewer.save()
+        serialized_reviewer = ReviewerSerializer(reviewer)
+        return Response(serialized_reviewer.data, 200)
+
+    def delete(self, request, pk):
+        reviewer = Reviewer.objects.get(id=pk)
+        reviewer.delete()
+        return Response("", 204)

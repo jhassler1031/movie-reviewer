@@ -16,13 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from reviewer_app.views import welcome, MovieListCreateAPIView, MovieDetailAPIView \
-
+from reviewer_app.views import welcome, MovieListCreateAPIView, MovieDetailAPIView, \
+                            ReviewerListCreateAPIView, ReviewerDetailAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', welcome),
     path('movies/', MovieListCreateAPIView.as_view()),
     path('movies/<int:pk>', MovieDetailAPIView.as_view()),
+    path('reviewers/', ReviewerListCreateAPIView.as_view()),
+    path('reviewers/<int:pk>', ReviewerDetailAPIView.as_view()),
 
 ]
