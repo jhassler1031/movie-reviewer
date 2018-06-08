@@ -8,9 +8,10 @@ reviews_url = "http://localhost:8000/reviews/"
 def display_sub_menu():
     print("""
 What would you like to do?
-1) View full details of a single entry
-2) Modify an entry
-3) Delete an entry
+1) Add an entry
+2) View full details of a single entry
+3) Modify an entry
+4) Delete an entry
 Press <enter> to return to the main menu
 """)
     sub_menu_input = input("> ")
@@ -22,10 +23,48 @@ def get_id():
 
 def movies_sub_menu(url):
     sub_menu_choice = display_sub_menu()
-    item_id = get_id()
-    item_url = url + item_id
-    item = requests.get(item_url).json()
-    print(item["title"])
+
+    if sub_menu_choice == "1":
+        title = input("Title: ")
+        imdb_link = input("IMDB link: ")
+        director = input("Director: ")
+        release_year = input("Release year: ")
+        genre = input("Genre: ")
+
+        requests.post(url, data={'title': title, 'imdb_link': imdb_link, 'director': director, \
+                                'release_year': release_year, 'genre': genre})
+        return True
+    elif sub_menu_choice == "":
+        return False
+    else:
+        item_id = get_id()
+        item_url = url + item_id
+        item = requests.get(item_url).json()
+
+        if sub_menu_choice == "2":
+            print(f"""
+ID: {item['id']}
+Title: {item['title']}
+IMDB Link: {item['imdb_link']}
+Director: {item['director']}
+Year Released: {item['release_year']}
+Genre: {item['genre']}
+""")
+            return True
+        elif sub_menu_choice == "3":
+            title = input("Title: ")
+            imdb_link = input("IMDB link: ")
+            director = input("Director: ")
+            release_year = input("Release year: ")
+            genre = input("Genre: ")
+
+            requests.put(item_url, data={'title': title, 'imdb_link': imdb_link, 'director': director, \
+                                    'release_year': release_year, 'genre': genre})
+            return True
+        elif sub_menu_choice == "4":
+            requests.delete(item_url)
+            return True
+
 
 def main_menu():
     print("""
@@ -41,7 +80,7 @@ Press <enter> to exit
         movies = requests.get(movies_url).json()
         for movie in movies:
             print(f"ID: {movie['id']} Title: {movie['title']} Released: {movie['release_year']} Genre: {movie['genre']}")
-        while movie_sub_menu(movies_url):
+        while movies_sub_menu(movies_url):
             pass
         return True
     elif main_input == "2":
