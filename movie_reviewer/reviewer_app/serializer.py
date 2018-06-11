@@ -12,6 +12,13 @@ class ReviewerSerializer(serializers.ModelSerializer):
         fields = ["id", "age", "occupation", "postal_code"]
 
 class ReviewSerializer(serializers.ModelSerializer):
+
+    movie_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Review
-        fields = ["id", "stars", "review_text", "movie", "reviewer"]
+        fields = ["id", "stars", "review_text", "movie", "reviewer", "movie_name"]
+        # depth = 1
+
+    def get_movie_name(self, obj):
+        return obj.movie.title

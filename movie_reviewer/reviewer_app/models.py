@@ -18,7 +18,6 @@ class Reviewer(models.Model):
     age = models.IntegerField(null=True)
     occupation = models.CharField(max_length=255, null=True)
     postal_code = models.IntegerField(null=True)
-    #name = models.CharField(max_length=255)
 
     def __str__(self):
         return f"""

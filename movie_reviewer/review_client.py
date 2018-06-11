@@ -21,6 +21,7 @@ def get_id():
     item_id = input("Enter the ID number: ")
     return item_id
 
+#Movies Sub Menu Function ================================================
 def movies_sub_menu(url):
     sub_menu_choice = display_sub_menu()
 
@@ -65,7 +66,85 @@ Genre: {item['genre']}
             requests.delete(item_url)
             return True
 
+#Reviewers Sub Menu Function ===============================================
+def reviewers_sub_menu(url):
+    sub_menu_choice = display_sub_menu()
 
+    if sub_menu_choice == "1":
+        age = input("Age: ")
+        occupation = input("Occupation: ")
+        postal_code = input("Zip Code: ")
+
+        requests.post(url, data={'age': age, 'occupation': occupation, 'postal_code': postal_code})
+        return True
+    elif sub_menu_choice == "":
+        return False
+    else:
+        item_id = get_id()
+        item_url = url + item_id
+        item = requests.get(item_url).json()
+
+        if sub_menu_choice == "2":
+            print(f"""
+ID: {item['id']}
+Age: {item['age']}
+Occupation: {item['occupation']}
+Zip Code: {item['postal_code']}
+""")
+            return True
+        elif sub_menu_choice == "3":
+            age = input("Age: ")
+            occupation = input("Occupation: ")
+            postal_code = input("Zip Code: ")
+
+            requests.put(item_url, data={'age': age, 'occupation': occupation, 'postal_code': postal_code})
+            return True
+        elif sub_menu_choice == "4":
+            requests.delete(item_url)
+            return True
+
+#Review Sub Menu Function
+def reviews_sub_menu(url):
+    sub_menu_choice = display_sub_menu()
+
+    if sub_menu_choice == "1":
+        stars = input("Stars (1 out of 5): ")
+        review_text = input("Review: ")
+        movie = input("Movie ID: ")
+        reviewer = input("Reviewer ID: ")
+
+        resp = requests.post(url, data={'stars': stars, 'review_text': review_text, 'movie': movie, 'reviewer': reviewer})
+        print(resp)
+        return True
+    elif sub_menu_choice == "":
+        return False
+    else:
+        item_id = get_id()
+        item_url = url + item_id
+        item = requests.get(item_url).json()
+
+        if sub_menu_choice == "2":
+            print(f"""
+ID: {item['id']}
+Stars: {item['stars']}
+Review: {item['review_text']}
+Movie: {item['movie']}
+Reviewer: {item['reviewer']}
+""")
+            return True
+        elif sub_menu_choice == "3":
+            stars = input("Stars (1 out of 5): ")
+            review_text = input("Review: ")
+            movie = input("Movie ID: ")
+            reviewer = input("Reviewer ID: ")
+
+            requests.put(item_url, data={'stars': stars, 'review_text': review_text, 'movie': movie, 'reviewer': reviewer})
+            return True
+        elif sub_menu_choice == "4":
+            requests.delete(item_url)
+            return True
+
+#Main Menu Function =======================================================
 def main_menu():
     print("""
 What would you like to view?
@@ -87,22 +166,19 @@ Press <enter> to exit
         reviewers = requests.get(reviewers_url).json()
         for reviewer in reviewers:
             print(f"ID: {reviewer['id']} Age: {reviewer['age']} Occupation: {reviewer['occupation']} Zip: {reviewer['postal_code']}")
-
+        while reviewers_sub_menu(reviewers_url):
+            pass
         return True
     elif main_input == "3":
         reviews = requests.get(reviews_url).json()
         for review in reviews:
-            print(f"ID: {review['id']} Movie Reviewed: {review['movie'].title} Stars: {review['stars']}")
-
+            print(f"ID: {review['id']} Movie Reviewed: {review['movie']} Stars: {review['stars']}")
+        while reviews_sub_menu(reviews_url):
+            pass
         return True
     else:
         return False
-    #return main_input
 
-
-
-
-
-
+#Main Program ============================================================
 while main_menu():
     pass
